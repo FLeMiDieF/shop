@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Категории — Админ{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Категории</h1>
+
+<form method="post" class="form form--inline">
+    <input type="text" name="name" placeholder="Новая категория" required>
+    <button type="submit" class="btn">Добавить</button>
+</form>
+
+<ul class="category-list category-list--admin">
+    {% for cat in categories %}
+    <li>{{ cat.name }} <span class="muted">({{ cat.products|length }} товаров)</span></li>
+    {% else %}
+    <li>Категорий пока нет.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

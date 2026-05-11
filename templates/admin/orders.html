@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Заказы — Админ{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Заказы</h1>
+
+<table class="admin-table">
+    <thead>
+        <tr><th>№</th><th>Покупатель</th><th>Товары</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <td>{{ o.id }}</td>
+            <td>{{ o.user.username }}</td>
+            <td>
+                {% for item in o.items %}
+                    {{ item.product.name }} × {{ item.quantity }}<br>
+                {% endfor %}
+            </td>
+            <td>{{ "%.2f"|format(o.total) }} ₽</td>
+            <td>
+                <form action="{{ url_for('admin.order_status', order_id=o.id) }}" method="post" style="display:flex;gap:4px">
+                    <select name="status" class="status-select">
+                        {% for s in ['new','paid','shipped','done'] %}
+                        <option value="{{ s }}" {{ 'selected' if o.status == s }}>{{ s }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn--sm">OK</button>
+                </form>
+            </td>
+            <td>{{ o.created_at.strftime('%d.%m.%Y') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Главная — ShopFlask{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Добро пожаловать в ShopFlask</h1>
+    <p>Лучшие товары по лучшим ценам</p>
+    <a href="{{ url_for('shop.catalog') }}" class="btn">Перейти в каталог</a>
+</section>
+
+<section class="section">
+    <h2 class="section__title">Новинки</h2>
+    <div class="product-grid">
+        {% for p in products %}
+        <div class="product-card">
+            <a href="{{ url_for('shop.product', product_id=p.id) }}">
+                <img src="{{ url_for('static', filename='uploads/' + p.image) }}" alt="{{ p.name }}" class="product-card__img">
+                <div class="product-card__body">
+                    <h3 class="product-card__name">{{ p.name }}</h3>
+                    <p class="product-card__price">{{ "%.2f"|format(p.price) }} ₽</p>
+                </div>
+            </a>
+            <form action="{{ url_for('cart.add', product_id=p.id) }}" method="post" class="product-card__form">
+                <input type="hidden" name="qty" value="1">
+                <button type="submit" class="btn btn--sm">В корзину</button>
+            </form>
+        </div>
+        {% else %}
+        <p>Товаров пока нет.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

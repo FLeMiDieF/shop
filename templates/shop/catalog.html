@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Каталог — ShopFlask{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Каталог</h1>
+
+<div class="catalog-layout">
+    <aside class="sidebar">
+        <h3>Категории</h3>
+        <ul class="category-list">
+            <li><a href="{{ url_for('shop.catalog') }}" {% if not current_category %}class="active"{% endif %}>Все товары</a></li>
+            {% for cat in categories %}
+            <li><a href="{{ url_for('shop.catalog', category=cat.id) }}" {% if current_category == cat.id %}class="active"{% endif %}>{{ cat.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </aside>
+
+    <div class="catalog-main">
+        <form class="search-form" method="get" action="{{ url_for('shop.catalog') }}">
+            {% if current_category %}<input type="hidden" name="category" value="{{ current_category }}">{% endif %}
+            <input type="text" name="q" value="{{ search }}" placeholder="Поиск товара..." class="search-input">
+            <button type="submit" class="btn">Найти</button>
+        </form>
+
+        <div class="product-grid">
+            {% for p in products %}
+            <div class="product-card">
+                <a href="{{ url_for('shop.product', product_id=p.id) }}">
+                    <img src="{{ url_for('static', filename='uploads/' + p.image) }}" alt="{{ p.name }}" class="product-card__img">
+                    <div class="product-card__body">
+                        <h3 class="product-card__name">{{ p.name }}</h3>
+                        <p class="product-card__price">{{ "%.2f"|format(p.price) }} ₽</p>
+                    </div>
+                </a>
+                <form action="{{ url_for('cart.add', product_id=p.id) }}" method="post" class="product-card__form">
+                    <input type="hidden" name="qty" value="1">
+                    <button type="submit" class="btn btn--sm">В корзину</button>
+                </form>
+            </div>
+            {% else %}
+            <p>Товары не найдены.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

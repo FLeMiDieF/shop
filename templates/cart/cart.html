@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Корзина — ShopFlask{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Корзина</h1>
+
+{% if items %}
+<div class="cart-layout">
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Кол-во</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('shop.product', product_id=item.product.id) }}">{{ item.product.name }}</a>
+                </td>
+                <td>{{ "%.2f"|format(item.product.price) }} ₽</td>
+                <td>{{ item.qty }}</td>
+                <td>{{ "%.2f"|format(item.subtotal) }} ₽</td>
+                <td><a href="{{ url_for('cart.remove', product_id=item.product.id) }}" class="remove-link">✕</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cart-summary">
+        <p class="cart-total">Итого: <strong>{{ "%.2f"|format(total) }} ₽</strong></p>
+        {% if current_user.is_authenticated %}
+            <form action="{{ url_for('cart.checkout') }}" method="post">
+                <button type="submit" class="btn btn--full">Оформить заказ</button>
+            </form>
+        {% else %}
+            <a href="{{ url_for('auth.login', next=url_for('cart.view')) }}" class="btn btn--full">Войти для оформления</a>
+        {% endif %}
+    </div>
+</div>
+{% else %}
+<p>Корзина пуста. <a href="{{ url_for('shop.catalog') }}">Перейти в каталог</a></p>
+{% endif %}
+{% endblock %}

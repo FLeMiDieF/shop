@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Админ-панель — ShopFlask{% endblock %}
+
+{% block content %}
+<h1 class="page-title">Админ-панель</h1>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <p class="stat-card__value">{{ stats.products }}</p>
+        <p class="stat-card__label">Товаров</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-card__value">{{ stats.orders }}</p>
+        <p class="stat-card__label">Заказов</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-card__value">{{ stats.users }}</p>
+        <p class="stat-card__label">Пользователей</p>
+    </div>
+    <div class="stat-card">
+        <p class="stat-card__value">{{ "%.0f"|format(stats.revenue) }} ₽</p>
+        <p class="stat-card__label">Выручка</p>
+    </div>
+</div>
+
+<div class="admin-links">
+    <a href="{{ url_for('admin.products') }}" class="btn">Товары</a>
+    <a href="{{ url_for('admin.orders') }}" class="btn">Заказы</a>
+    <a href="{{ url_for('admin.categories') }}" class="btn">Категории</a>
+</div>
+
+<h2 class="section__title">Последние заказы</h2>
+<table class="admin-table">
+    <thead>
+        <tr><th>№</th><th>Пользователь</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr>
+    </thead>
+    <tbody>
+        {% for o in orders %}
+        <tr>
+            <td>{{ o.id }}</td>
+            <td>{{ o.user.username }}</td>
+            <td>{{ "%.2f"|format(o.total) }} ₽</td>
+            <td><span class="status status--{{ o.status }}">{{ o.status }}</span></td>
+            <td>{{ o.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

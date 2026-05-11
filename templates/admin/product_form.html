@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Редактировать' if product else 'Новый товар' }} — Админ{% endblock %}
+
+{% block content %}
+<h1 class="page-title">{{ 'Редактировать товар' if product else 'Новый товар' }}</h1>
+
+<form method="post" enctype="multipart/form-data" class="form">
+    <label>Название
+        <input type="text" name="name" value="{{ product.name if product else '' }}" required>
+    </label>
+    <label>Описание
+        <textarea name="description" rows="4">{{ product.description if product else '' }}</textarea>
+    </label>
+    <label>Цена (₽)
+        <input type="number" name="price" step="0.01" min="0" value="{{ product.price if product else '' }}" required>
+    </label>
+    <label>Остаток
+        <input type="number" name="stock" min="0" value="{{ product.stock if product else 0 }}" required>
+    </label>
+    <label>Категория
+        <select name="category_id">
+            <option value="">— без категории —</option>
+            {% for cat in categories %}
+            <option value="{{ cat.id }}" {{ 'selected' if product and product.category_id == cat.id }}>{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+    </label>
+    <label>Фото товара
+        <input type="file" name="image" accept="image/*">
+    </label>
+    {% if product and product.image != 'no-image.png' %}
+    <img src="{{ url_for('static', filename='uploads/' + product.image) }}" alt="" style="max-height:120px;margin-top:8px">
+    {% endif %}
+    <button type="submit" class="btn btn--full">Сохранить</button>
+</form>
+<a href="{{ url_for('admin.products') }}" class="back-link">← Назад к списку</a>
+{% endblock %}
