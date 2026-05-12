@@ -2,48 +2,79 @@
 {% block title %}Админ-панель — ShopFlask{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Админ-панель</h1>
-
-<div class="stats-grid">
-    <div class="stat-card">
-        <p class="stat-card__value">{{ stats.products }}</p>
-        <p class="stat-card__label">Товаров</p>
-    </div>
-    <div class="stat-card">
-        <p class="stat-card__value">{{ stats.orders }}</p>
-        <p class="stat-card__label">Заказов</p>
-    </div>
-    <div class="stat-card">
-        <p class="stat-card__value">{{ stats.users }}</p>
-        <p class="stat-card__label">Пользователей</p>
-    </div>
-    <div class="stat-card">
-        <p class="stat-card__value">{{ "%.0f"|format(stats.revenue) }} ₽</p>
-        <p class="stat-card__label">Выручка</p>
-    </div>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="section-title mb-0">Админ-панель</h1>
+  <div class="d-flex gap-2">
+    <a href="{{ url_for('admin.products') }}" class="btn btn-accent btn-sm">
+      <i class="bi bi-box-seam me-1"></i>Товары
+    </a>
+    <a href="{{ url_for('admin.orders') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-receipt me-1"></i>Заказы
+    </a>
+    <a href="{{ url_for('admin.categories') }}" class="btn btn-outline-secondary btn-sm">
+      <i class="bi bi-tags me-1"></i>Категории
+    </a>
+  </div>
 </div>
 
-<div class="admin-links">
-    <a href="{{ url_for('admin.products') }}" class="btn">Товары</a>
-    <a href="{{ url_for('admin.orders') }}" class="btn">Заказы</a>
-    <a href="{{ url_for('admin.categories') }}" class="btn">Категории</a>
+<!-- Stat cards -->
+<div class="row g-3 mb-5">
+  <div class="col-6 col-md-3">
+    <div class="card stat-card text-center p-3">
+      <div class="stat-value">{{ stats.products }}</div>
+      <div class="stat-label">Товаров</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card stat-card text-center p-3">
+      <div class="stat-value">{{ stats.orders }}</div>
+      <div class="stat-label">Заказов</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card stat-card text-center p-3">
+      <div class="stat-value">{{ stats.users }}</div>
+      <div class="stat-label">Пользователей</div>
+    </div>
+  </div>
+  <div class="col-6 col-md-3">
+    <div class="card stat-card text-center p-3">
+      <div class="stat-value">{{ "%.0f"|format(stats.revenue) }}</div>
+      <div class="stat-label">Выручка, ₽</div>
+    </div>
+  </div>
 </div>
 
-<h2 class="section__title">Последние заказы</h2>
-<table class="admin-table">
-    <thead>
-        <tr><th>№</th><th>Пользователь</th><th>Сумма</th><th>Статус</th><th>Дата</th></tr>
-    </thead>
-    <tbody>
+<!-- Recent orders -->
+<h2 class="section-title">Последние заказы</h2>
+<div class="card border-0 shadow-sm rounded-3">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>№</th>
+          <th>Покупатель</th>
+          <th class="text-end">Сумма</th>
+          <th>Статус</th>
+          <th>Дата</th>
+        </tr>
+      </thead>
+      <tbody>
         {% for o in orders %}
         <tr>
-            <td>{{ o.id }}</td>
-            <td>{{ o.user.username }}</td>
-            <td>{{ "%.2f"|format(o.total) }} ₽</td>
-            <td><span class="status status--{{ o.status }}">{{ o.status }}</span></td>
-            <td>{{ o.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+          <td class="text-muted">#{{ o.id }}</td>
+          <td>{{ o.user.username }}</td>
+          <td class="text-end fw-semibold">{{ "%.2f"|format(o.total) }} ₽</td>
+          <td>
+            <span class="badge badge-{{ o.status }} rounded-pill px-3">{{ o.status }}</span>
+          </td>
+          <td class="text-muted small">{{ o.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
         </tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted py-4">Заказов пока нет</td></tr>
         {% endfor %}
-    </tbody>
-</table>
+      </tbody>
+    </table>
+  </div>
+</div>
 {% endblock %}

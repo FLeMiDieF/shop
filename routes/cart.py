@@ -50,6 +50,7 @@ def checkout():
     if not cart_data:
         flash("Корзина пуста.", "warning")
         return redirect(url_for("cart.view"))
+
     total = 0
     order_items = []
     for product_id, qty in cart_data.items():
@@ -61,6 +62,7 @@ def checkout():
         else:
             flash(f"Товар «{p.name if p else product_id}» недоступен в нужном количестве.", "danger")
             return redirect(url_for("cart.view"))
+
     order = Order(user_id=current_user.id, total=total)
     db.session.add(order)
     db.session.flush()
@@ -69,5 +71,13 @@ def checkout():
         db.session.add(item)
     db.session.commit()
     session.pop("cart", None)
+
+    # Async task: send confirmation email
+    try:
+        from tasks import send_order_confirmation
+        send_order_confirmation.delay(order.id, current_user.email, total)
+    except Exception:
+        pass  # Celery unavailable in local dev without Redis — that's fine
+
     flash(f"Заказ №{order.id} оформлен! Сумма: {total:.2f} ₽", "success")
     return redirect(url_for("shop.index"))

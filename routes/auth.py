@@ -11,15 +11,11 @@ def register():
         return redirect(url_for("shop.index"))
     if request.method == "POST":
         username = request.form["username"].strip()
-        email = request.form["email"].strip().lower()
         password = request.form["password"]
-        if User.query.filter_by(email=email).first():
-            flash("Этот email уже зарегистрирован.", "danger")
-            return redirect(url_for("auth.register"))
         if User.query.filter_by(username=username).first():
             flash("Это имя пользователя уже занято.", "danger")
             return redirect(url_for("auth.register"))
-        user = User(username=username, email=email)
+        user = User(username=username)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
@@ -33,9 +29,9 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("shop.index"))
     if request.method == "POST":
-        email = request.form["email"].strip().lower()
+        username = request.form["username"].strip()
         password = request.form["password"]
-        user = User.query.filter_by(email=email).first()
+        user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
             login_user(user)
             return redirect(request.args.get("next") or url_for("shop.index"))

@@ -1,6 +1,17 @@
 __pycache__/
 *.pyc
+*.pyo
 .env
 venv/
 .venv/
 instance/
+shop.db
+static/uploads/*
+!static/uploads/.gitkeep
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/
+migrations/

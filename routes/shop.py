@@ -1,10 +1,12 @@
 from flask import Blueprint, render_template, request
 from models import Product, Category
+from extensions import cache
 
 shop = Blueprint("shop", __name__)
 
 
 @shop.route("/")
+@cache.cached(timeout=60, key_prefix="shop_index")
 def index():
     featured = Product.query.filter(Product.stock > 0).order_by(Product.created_at.desc()).limit(8).all()
     categories = Category.query.all()
@@ -27,6 +29,7 @@ def catalog():
 
 
 @shop.route("/product/<int:product_id>")
+@cache.cached(timeout=120, key_prefix=lambda: f"product_{request.view_args['product_id']}")
 def product(product_id):
     p = Product.query.get_or_404(product_id)
     related = Product.query.filter(

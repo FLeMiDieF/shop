@@ -1,11 +1,20 @@
 from flask import Flask
 from flask_login import LoginManager
+from flasgger import Swagger
 from config import Config
 from models import db, User
+from extensions import cache, migrate
 from routes.auth import auth
 from routes.shop import shop
 from routes.cart import cart
 from routes.admin import admin
+from routes.api import api
+
+SWAGGER_CONFIG = {
+    "title": "ShopFlask API",
+    "uiversion": 3,
+    "specs_route": "/api/docs/",
+}
 
 
 def create_app():
@@ -13,6 +22,9 @@ def create_app():
     app.config.from_object(Config)
 
     db.init_app(app)
+    migrate.init_app(app, db)
+    cache.init_app(app)
+    Swagger(app, template={"info": {"title": "ShopFlask API", "version": "1.0"}})
 
     login_manager = LoginManager(app)
     login_manager.login_view = "auth.login"
@@ -27,6 +39,7 @@ def create_app():
     app.register_blueprint(shop)
     app.register_blueprint(cart)
     app.register_blueprint(admin)
+    app.register_blueprint(api)
 
     with app.app_context():
         db.create_all()

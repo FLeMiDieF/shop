@@ -2,18 +2,34 @@
 {% block title %}Категории — Админ{% endblock %}
 
 {% block content %}
-<h1 class="page-title">Категории</h1>
+<h1 class="section-title">Категории</h1>
 
-<form method="post" class="form form--inline">
-    <input type="text" name="name" placeholder="Новая категория" required>
-    <button type="submit" class="btn">Добавить</button>
-</form>
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card border-0 shadow-sm rounded-3 p-3">
+      <h6 class="fw-bold mb-3">Добавить категорию</h6>
+      <form method="post" class="d-flex gap-2">
+        <input type="text" name="name" placeholder="Название" class="form-control" required>
+        <button class="btn btn-accent px-3">
+          <i class="bi bi-plus-lg"></i>
+        </button>
+      </form>
+    </div>
+  </div>
 
-<ul class="category-list category-list--admin">
-    {% for cat in categories %}
-    <li>{{ cat.name }} <span class="muted">({{ cat.products|length }} товаров)</span></li>
-    {% else %}
-    <li>Категорий пока нет.</li>
-    {% endfor %}
-</ul>
+  <div class="col-md-8">
+    <div class="card border-0 shadow-sm rounded-3">
+      <ul class="list-group list-group-flush rounded-3">
+        {% for cat in categories %}
+        <li class="list-group-item d-flex justify-content-between align-items-center px-4">
+          <span class="fw-medium">{{ cat.name }}</span>
+          <span class="badge bg-secondary rounded-pill">{{ cat.products|length }} товаров</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-center text-muted py-4">Категорий пока нет</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
 {% endblock %}

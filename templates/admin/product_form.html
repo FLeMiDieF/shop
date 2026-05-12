@@ -1,37 +1,68 @@
 {% extends "base.html" %}
-{% block title %}{{ 'Редактировать' if product else 'Новый товар' }} — Админ{% endblock %}
+{% block title %}{{ 'Редактировать товар' if product else 'Новый товар' }} — Админ{% endblock %}
 
 {% block content %}
-<h1 class="page-title">{{ 'Редактировать товар' if product else 'Новый товар' }}</h1>
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="{{ url_for('admin.products') }}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h1 class="section-title mb-0">
+    {{ 'Редактировать товар' if product else 'Новый товар' }}
+  </h1>
+</div>
 
-<form method="post" enctype="multipart/form-data" class="form">
-    <label>Название
-        <input type="text" name="name" value="{{ product.name if product else '' }}" required>
-    </label>
-    <label>Описание
-        <textarea name="description" rows="4">{{ product.description if product else '' }}</textarea>
-    </label>
-    <label>Цена (₽)
-        <input type="number" name="price" step="0.01" min="0" value="{{ product.price if product else '' }}" required>
-    </label>
-    <label>Остаток
-        <input type="number" name="stock" min="0" value="{{ product.stock if product else 0 }}" required>
-    </label>
-    <label>Категория
-        <select name="category_id">
-            <option value="">— без категории —</option>
-            {% for cat in categories %}
-            <option value="{{ cat.id }}" {{ 'selected' if product and product.category_id == cat.id }}>{{ cat.name }}</option>
-            {% endfor %}
-        </select>
-    </label>
-    <label>Фото товара
-        <input type="file" name="image" accept="image/*">
-    </label>
-    {% if product and product.image != 'no-image.png' %}
-    <img src="{{ url_for('static', filename='uploads/' + product.image) }}" alt="" style="max-height:120px;margin-top:8px">
-    {% endif %}
-    <button type="submit" class="btn btn--full">Сохранить</button>
-</form>
-<a href="{{ url_for('admin.products') }}" class="back-link">← Назад к списку</a>
+<div class="row justify-content-center">
+  <div class="col-lg-7">
+    <div class="card border-0 shadow-sm rounded-3">
+      <div class="card-body p-4">
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label fw-medium">Название</label>
+            <input type="text" name="name" class="form-control"
+                   value="{{ product.name if product else '' }}" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">Описание</label>
+            <textarea name="description" class="form-control" rows="4">{{ product.description if product else '' }}</textarea>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Цена (₽)</label>
+              <input type="number" name="price" step="0.01" min="0" class="form-control"
+                     value="{{ product.price if product else '' }}" required>
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Остаток</label>
+              <input type="number" name="stock" min="0" class="form-control"
+                     value="{{ product.stock if product else 0 }}" required>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-medium">Категория</label>
+            <select name="category_id" class="form-select">
+              <option value="">— без категории —</option>
+              {% for cat in categories %}
+              <option value="{{ cat.id }}"
+                {{ 'selected' if product and product.category_id == cat.id }}>
+                {{ cat.name }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-medium">Фото товара</label>
+            <input type="file" name="image" class="form-control" accept="image/*">
+            {% if product and product.image != 'no-image.png' %}
+            <img src="{{ url_for('static', filename='uploads/' + product.image) }}"
+                 class="mt-2 rounded" style="max-height:120px;" alt="">
+            {% endif %}
+          </div>
+          <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold">
+            <i class="bi bi-check-lg me-1"></i>Сохранить
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
