@@ -42,8 +42,23 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
     image = db.Column(db.String(200), default="no-image.png")
+    sizes = db.Column(db.String(100), default="")
     category_id = db.Column(db.Integer, db.ForeignKey("categories.id"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+
+class AboutPage(db.Model):
+    __tablename__ = "about_page"
+
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(120), default="California Skateshop")
+    subtitle = db.Column(db.String(200), default="Los Angeles, CA")
+    description = db.Column(db.Text, default="")
+    address = db.Column(db.String(200), default="")
+    phone = db.Column(db.String(50), default="")
+    email = db.Column(db.String(120), default="")
+    hours_weekday = db.Column(db.String(50), default="")
+    hours_weekend = db.Column(db.String(50), default="")
 
 
 class Order(db.Model):

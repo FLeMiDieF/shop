@@ -6,7 +6,7 @@ import json
 def test_homepage_ok(client):
     r = client.get("/")
     assert r.status_code == 200
-    assert "ShopFlask" in r.data.decode()
+    assert "California Skateshop" in r.data.decode()
 
 
 def test_catalog_ok(client):
@@ -93,7 +93,7 @@ def test_api_categories(client):
     assert r.status_code == 200
     data = json.loads(r.data)
     assert isinstance(data, list)
-    assert any(c["name"] == "Электроника" for c in data)
+    assert any(c["name"] == "Футболки" for c in data)
 
 
 def test_api_products_filter_by_category(client):

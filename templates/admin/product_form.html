@@ -38,6 +38,13 @@
             </div>
           </div>
           <div class="mb-3">
+            <label class="form-label fw-medium">Размеры</label>
+            <input type="text" name="sizes" class="form-control"
+                   placeholder="XS, S, M, L, XL, XXL"
+                   value="{{ product.sizes if product else '' }}">
+            <div class="form-text">Через запятую: XS, S, M, L, XL, XXL или 38, 39, 40... или One Size</div>
+          </div>
+          <div class="mb-3">
             <label class="form-label fw-medium">Категория</label>
             <select name="category_id" class="form-select">
               <option value="">— без категории —</option>

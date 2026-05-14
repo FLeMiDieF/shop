@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}О нас — California Skateshop{% endblock %}
+
+{% block content %}
+<div class="about-hero mb-5">
+  <p class="text-accent fw-semibold small text-uppercase mb-3" style="letter-spacing:.15em;position:relative;z-index:1;">
+    Los Angeles, California
+  </p>
+  <h1 style="font-size:3.2rem;font-weight:700;letter-spacing:-.04em;line-height:1.1;position:relative;z-index:1;" class="mb-3">
+    <span class="text-accent">{{ page.title }}</span>
+  </h1>
+  <p style="color:var(--text-secondary);font-size:1.05rem;position:relative;z-index:1;" class="mb-0">
+    {{ page.subtitle }}
+  </p>
+</div>
+
+<div class="row g-4 mb-5">
+  <!-- Description -->
+  <div class="col-md-7">
+    <h2 class="section-title">О магазине</h2>
+    {% for line in page.description.split('\n') %}
+      {% if line.strip() %}
+        <p style="color:var(--text-secondary);line-height:1.75;{% if loop.first %}font-size:1.05rem;{% endif %}" class="mb-3">
+          {{ line }}
+        </p>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  <!-- Contacts -->
+  <div class="col-md-5">
+    <div class="sidebar-card h-100">
+      <p class="sidebar-title"><i class="bi bi-geo-alt-fill text-accent me-2"></i>Контакты</p>
+      <ul class="list-unstyled mb-0">
+        {% if page.address %}
+        <li class="mb-4 d-flex align-items-start gap-3">
+          <div style="width:36px;height:36px;background:var(--accent-dim);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-building text-accent"></i>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Адрес</div>
+            {% for line in page.address.split('\n') %}
+              <div style="color:var(--text-secondary);font-size:.88rem;">{{ line }}</div>
+            {% endfor %}
+          </div>
+        </li>
+        {% endif %}
+        {% if page.phone %}
+        <li class="mb-4 d-flex align-items-start gap-3">
+          <div style="width:36px;height:36px;background:var(--accent-dim);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-telephone text-accent"></i>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Телефон</div>
+            <div style="color:var(--text-secondary);font-size:.88rem;">{{ page.phone }}</div>
+          </div>
+        </li>
+        {% endif %}
+        {% if page.email %}
+        <li class="mb-4 d-flex align-items-start gap-3">
+          <div style="width:36px;height:36px;background:var(--accent-dim);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-envelope text-accent"></i>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Email</div>
+            <div style="color:var(--text-secondary);font-size:.88rem;">{{ page.email }}</div>
+          </div>
+        </li>
+        {% endif %}
+        {% if page.hours_weekday or page.hours_weekend %}
+        <li class="d-flex align-items-start gap-3">
+          <div style="width:36px;height:36px;background:var(--accent-dim);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <i class="bi bi-clock text-accent"></i>
+          </div>
+          <div>
+            <div style="font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Часы работы</div>
+            {% if page.hours_weekday %}
+            <div style="color:var(--text-secondary);font-size:.88rem;">{{ page.hours_weekday }}</div>
+            {% endif %}
+            {% if page.hours_weekend %}
+            <div style="color:var(--text-secondary);font-size:.88rem;">{{ page.hours_weekend }}</div>
+            {% endif %}
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Values -->
+<h2 class="section-title mb-4">Наши ценности</h2>
+<div class="row g-3 mb-5">
+  {% for icon, title, text in [
+    ('bi-lightning-charge-fill', 'Skate', 'Скейтбординг — это свобода движения. Мы уважаем корни и создаём вещи, в которых удобно кататься, гулять и жить.'),
+    ('bi-star-fill', 'Style', 'Стиль — это самовыражение. От Old Money до Street Wear — у нас есть образ для каждого характера и настроения.'),
+    ('bi-people-fill', 'Culture', 'Культура объединяет. Лос-Анджелес — это состояние духа. Мы несём эту энергию в каждой вещи.')
+  ] %}
+  <div class="col-md-4">
+    <div class="sidebar-card h-100 text-center" style="padding:2rem 1.5rem;">
+      <div style="width:56px;height:56px;background:var(--accent-dim);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;">
+        <i class="bi {{ icon }} text-accent" style="font-size:1.5rem;"></i>
+      </div>
+      <h5 style="font-weight:700;letter-spacing:-.02em;" class="mb-2">{{ title }}</h5>
+      <p style="color:var(--text-secondary);font-size:.9rem;line-height:1.65;margin:0;">{{ text }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

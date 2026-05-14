@@ -2,9 +2,15 @@
 {% block title %}Категории — Админ{% endblock %}
 
 {% block content %}
-<h1 class="section-title">Категории</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="section-title mb-0">Категории</h1>
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left me-1"></i>Панель
+  </a>
+</div>
 
 <div class="row g-4">
+  <!-- Добавить категорию -->
   <div class="col-md-4">
     <div class="card border-0 shadow-sm rounded-3 p-3">
       <h6 class="fw-bold mb-3">Добавить категорию</h6>
@@ -17,13 +23,32 @@
     </div>
   </div>
 
+  <!-- Список категорий -->
   <div class="col-md-8">
     <div class="card border-0 shadow-sm rounded-3">
       <ul class="list-group list-group-flush rounded-3">
         {% for cat in categories %}
-        <li class="list-group-item d-flex justify-content-between align-items-center px-4">
-          <span class="fw-medium">{{ cat.name }}</span>
-          <span class="badge bg-secondary rounded-pill">{{ cat.products|length }} товаров</span>
+        <li class="list-group-item px-4 py-3">
+          <div class="d-flex justify-content-between align-items-center gap-2">
+            <!-- Форма редактирования -->
+            <form action="{{ url_for('admin.category_edit', cat_id=cat.id) }}" method="post"
+                  class="d-flex align-items-center gap-2 flex-grow-1">
+              <input type="text" name="name" value="{{ cat.name }}"
+                     class="form-control form-control-sm" style="max-width:220px;" required>
+              <button class="btn btn-sm btn-outline-secondary">
+                <i class="bi bi-pencil"></i>
+              </button>
+            </form>
+            <div class="d-flex align-items-center gap-2">
+              <span class="badge bg-secondary rounded-pill">{{ cat.products|length }} товаров</span>
+              <form action="{{ url_for('admin.category_delete', cat_id=cat.id) }}" method="post"
+                    onsubmit="return confirm('Удалить категорию «{{ cat.name }}»? Товары останутся без категории.')">
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </form>
+            </div>
+          </div>
         </li>
         {% else %}
         <li class="list-group-item text-center text-muted py-4">Категорий пока нет</li>

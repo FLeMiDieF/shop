@@ -35,7 +35,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             return redirect(request.args.get("next") or url_for("shop.index"))
-        flash("Неверный email или пароль.", "danger")
+        flash("Неверный ник или пароль.", "danger")
     return render_template("auth/login.html")
 
 

@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}О нас — Редактировать{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">
+    <i class="bi bi-arrow-left"></i>
+  </a>
+  <h1 class="section-title mb-0">Редактировать «О нас»</h1>
+</div>
+
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm rounded-3">
+      <div class="card-body p-4">
+        <form method="post">
+
+          <h6 class="fw-bold text-uppercase text-muted small mb-3">Основное</h6>
+          <div class="mb-3">
+            <label class="form-label fw-medium">Название магазина</label>
+            <input type="text" name="title" class="form-control"
+                   value="{{ page.title }}" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-medium">Подзаголовок</label>
+            <input type="text" name="subtitle" class="form-control"
+                   value="{{ page.subtitle }}">
+          </div>
+
+          <h6 class="fw-bold text-uppercase text-muted small mb-3">Описание</h6>
+          <div class="mb-4">
+            <label class="form-label fw-medium">Текст о магазине</label>
+            <textarea name="description" class="form-control" rows="6">{{ page.description }}</textarea>
+            <div class="form-text">Для переноса строки используй Enter</div>
+          </div>
+
+          <h6 class="fw-bold text-uppercase text-muted small mb-3">Контакты</h6>
+          <div class="mb-3">
+            <label class="form-label fw-medium">Адрес</label>
+            <textarea name="address" class="form-control" rows="2">{{ page.address }}</textarea>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Телефон</label>
+              <input type="text" name="phone" class="form-control" value="{{ page.phone }}">
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Email</label>
+              <input type="email" name="email" class="form-control" value="{{ page.email }}">
+            </div>
+          </div>
+          <div class="row g-3 mb-4">
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Часы работы (пн–пт)</label>
+              <input type="text" name="hours_weekday" class="form-control"
+                     value="{{ page.hours_weekday }}" placeholder="Пн–Пт: 10:00 — 21:00">
+            </div>
+            <div class="col-sm-6">
+              <label class="form-label fw-medium">Часы работы (сб–вс)</label>
+              <input type="text" name="hours_weekend" class="form-control"
+                     value="{{ page.hours_weekend }}" placeholder="Сб–Вс: 11:00 — 20:00">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-accent w-100 py-2 fw-semibold">
+            <i class="bi bi-check-lg me-1"></i>Сохранить
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
